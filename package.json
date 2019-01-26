@@ -1,0 +1,29 @@
+{
+  "name": "rdce-electron",
+  "version": "1.0.0",
+  "main": "./app/js/main.js",
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "electron": "^4.0.2",
+    "jquery": "^3.3.1",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
+    "popper.js": "^1.14.6"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.3"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SantiagoPagnone/RDCE-Electron.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SantiagoPagnone/RDCE-Electron/issues"
+  },
+  "homepage": "https://github.com/SantiagoPagnone/RDCE-Electron#readme",
+  "description": ""
+}
