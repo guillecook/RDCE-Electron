@@ -2,6 +2,7 @@
   "name": "rdce-electron",
   "version": "1.0.0",
   "main": "./app/js/main.js",
+  "productName":"rdce-electorn",
   "dependencies": {
     "bootstrap": "^4.2.1",
     "electron": "^4.0.2",
@@ -10,7 +11,8 @@
     "popper.js": "^1.14.6"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.6.3"
+    "@fortawesome/fontawesome-free": "^5.6.3",
+    "electron-builder": "^20.38.5"
   },
   "scripts": {
     "start": "electron ."
