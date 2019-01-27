@@ -3,6 +3,7 @@ const url = require('url');
 const path = require('path');
 const config = require(path.join(__dirname, '../../package.json'));
 const menu = require(path.join(__dirname, './menu.js'));
+const settings = require('electron-settings');
 
 
 const {
@@ -16,6 +17,7 @@ app.on('ready', function () {
    loadMainWindow();
    loadLoginWindow(mainWindow);
 });
+
 
 let mainWindow;
 
@@ -49,10 +51,11 @@ function loadLoginWindow(parentWindow) {
    loginWindow = new BrowserWindow({
       parent: parentWindow,
       width: 500,
-      height: 350,
+      height: 450,
       frame: false,
       modal: true
-   })
+   });
+   
    loginWindow.loadURL(url.format({
       pathname: path.join(__dirname, '../login.html'),
       protocol: 'file',

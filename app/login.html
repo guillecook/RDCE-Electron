@@ -17,29 +17,36 @@
 
 </head>
 
-<body >
-   
+<body>
+
     <div class="std-margin-top container">
 
         <form class="form-signin">
             <h2 class="form-signin-heading">Please sign in</h2>
-            <hr/>
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
+            <hr />
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="inputEndpoint" placeholder="Restful endpoint" aria-label="Restful endpoint"
+                    aria-describedby="basic-addon2" value="http://cloud.gestar.com/restful" autofocus>
+                <div class="input-group-append">
+                    <button id="buttonVerifyEndpoint" class="btn btn-outline-primary" type="button">Go!</button>
+                </div>
             </div>
-            <hr/>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <hr />
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input type="text" id="inputUsername" class="form-control" placeholder="Username" required disabled>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required disabled>
+            <label for="inputInstance" class="sr-only">Password</label>
+            <input type="password" id="inputInstance" class="form-control" placeholder="Instance name" required
+                disabled>
+            <hr />
+            <button class="btn btn-lg btn-primary btn-block" type="submit" disabled>Sign in</button>
         </form>
 
     </div> <!-- /container -->
     <!-- Includes js -->
     <script>
+        require('./js/login.js');
         window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.js');
         window.popper = require("../node_modules/popper.js/dist/umd/popper.js");
         window.Bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.js');
