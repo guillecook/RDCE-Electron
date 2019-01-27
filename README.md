@@ -13,7 +13,7 @@ https://electronjs.org/docs/tutorial/installation
 
 <b>Instalar JQuery</b>
 <br/>
-npm install jquery --save
+<pre>npm install jquery --save</pre>
 
 <b>Instalar Popper.js</b>
 <br/>
@@ -26,4 +26,7 @@ npm install jquery --save
 <b>Instalar malihu-custom-scrollbar-plugin</b>
 <br/>
 <pre>npm install malihu-custom-scrollbar-plugin</pre>
+
+Para iniciar 
+<pre>npm start</pre>
 
