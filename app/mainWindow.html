@@ -25,7 +25,7 @@
             <span class="menu-collapsed">RDCE</span>
         </a>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav invisible" >
+            <ul class="navbar-nav invisible">
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
@@ -144,35 +144,38 @@
                 </a>
                 <!-- Logo -->
                 <li class="list-group-item logo-separator d-flex justify-content-center">
-                    <img src='https://v4-alpha.getbootstrap.com/assets/brand/bootstrap-solid.svg' width="30" height="30" />
+                    <!-- <i class="fa fa-code" aria-hidden="true"></i> -->
                 </li>
             </ul><!-- List Group END-->
         </div><!-- sidebar-container END -->
 
         <!-- MAIN -->
         <div class="col">
+            <div id="rightContent">
 
-            <h1>
-                Collapsing Menu
-                <small class="text-muted">Version 2.1</small>
-            </h1>
+                <h1>
+                    Collapsing Menu
+                    <small class="text-muted">Version 2.1</small>
+                </h1>
 
 
-            <div class="card">
-                <h4 class="card-header">Requirements</h4>
-                <div class="card-body">
-                    <ul>
-                        <li>JQuery</li>
-                        <li>Bootstrap 4 beta-3</li>
-                    </ul>
+                <div class="card">
+                    <h4 class="card-header">Requirements</h4>
+                    <div class="card-body">
+                        <ul>
+                            <li>JQuery</li>
+                            <li>Bootstrap 4 beta-3</li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
-
-
 
         </div><!-- Main Col END -->
 
     </div><!-- body-row END -->
+
+    <!-- Includes js -->
     <script>
         window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.js');
         require('malihu-custom-scrollbar-plugin')($);
@@ -180,9 +183,6 @@
         window.Bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.js');
         window.mCustomScrollbar = require('../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js');
     </script>
-
-
-
     <script>
         // Hide submenus
         $('#body-row .collapse').collapse('hide');
