@@ -9,7 +9,12 @@ https://nodejs.org/es/download/package-manager/
 
 <b>Instalar Electron</b>
 <br/>
+<pre>npm install electron --save-dev</pre>
 https://electronjs.org/docs/tutorial/installation
+
+<b>Instalar Electron Settings</b>
+<br/>
+<pre>npm install electron-settings --save</pre>
 
 <b>Instalar JQuery</b>
 <br/>
