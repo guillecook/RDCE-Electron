@@ -8,7 +8,7 @@ buttonVerifyEndpoint.addEventListener('click', function(data) {
     var sEndpoint = $("#inputEndpoint").val();
     verifyEndpoint(sEndpoint);
     ipc.send('reply', `Send message from second window to renderer via main.`);
-    //window.close();
+    //
 });
 
 
@@ -23,16 +23,14 @@ function verifyEndpoint(sUrl) {
         console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
         response.on('data', (chunk) => {
             alert("OK " +chunk);
-            console.log(`BODY: ${chunk}`)
+            console.log(`BODY: ${chunk}`);
+            window.close();
         })
         response.on('end', () => {
             console.log('No more data in response.')
         })
     })
     request.end()
-
-
-    //request.end(body);
 }
 
 function loadUserSettings() {
