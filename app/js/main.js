@@ -74,9 +74,12 @@ ipcMain.on('synchronous-message', (event, arg) => {
    if (arg == "close-app") {
       loginWindow.close();
       loginWindow = null;
-      app.quit();
+      //app.quit();
    }
 });
+
+
+
 
 
 //TODO: Este menu deberia venir de algun json aparte? menu js? como?

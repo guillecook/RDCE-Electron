@@ -115,6 +115,12 @@
                     <small>OPTIONS</small>
                 </li>
                 <!-- /END Separator -->
+                <a href="#" class="bg-dark list-group-item list-group-item-action" id='monacoeditorsample'>
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-calendar fa-fw mr-3"></span>
+                        <span class="menu-collapsed">Monaco editor window</span>
+                    </div>
+                </a>
                 <a href="#" class="bg-dark list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fa fa-calendar fa-fw mr-3"></span>
@@ -177,6 +183,7 @@
 
     <!-- Includes js -->
     <script>
+        require('./js/mainWindow.js');
         window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.js');
         require('malihu-custom-scrollbar-plugin')($);
         window.popper = require("../node_modules/popper.js/dist/umd/popper.js");
