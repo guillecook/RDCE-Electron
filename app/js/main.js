@@ -55,13 +55,28 @@ function loadLoginWindow(parentWindow) {
       frame: false,
       modal: true
    });
-   
+   loginWindow.on('closed', (e) => {
+      console.log(e);
+      debugger;
+      loginWindow = null
+   });
    loginWindow.loadURL(url.format({
       pathname: path.join(__dirname, '../login.html'),
       protocol: 'file',
       slashes: true
    }));
 }
+
+const {
+   ipcMain
+} = require('electron');
+ipcMain.on('synchronous-message', (event, arg) => {
+   if (arg == "close-app") {
+      loginWindow.close();
+      loginWindow = null;
+      app.quit();
+   }
+});
 
 
 //TODO: Este menu deberia venir de algun json aparte? menu js? como?
