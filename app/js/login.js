@@ -7,80 +7,192 @@ ipc.on('message', (event, message) => console.log(message));
 const buttonVerifyEndpoint = document.getElementById('buttonVerifyEndpoint');
 buttonVerifyEndpoint.addEventListener('click', function (data) {
     var sEndpoint = $("#inputEndpoint").val();
-    verifyEndpoint(sEndpoint);
-    ipc.send('reply', `Send message from second window to renderer via main.`);
+    Doors.RESTFULL.ServerUrl = sEndpoint;
+    verifyEndpoint();
 });
 
-const buttonCloseApp = document.getElementById('buttonCloseApp');
-buttonCloseApp.addEventListener('click', function (data) {
-    closeApp();
+const buttonEditEndpoint = document.getElementById('buttonEditEndpoint');
+buttonEditEndpoint.addEventListener('click', function (data) {
+    Doors.RESTFULL.ServerUrl = "";
+    enableUserInputSection(false);
+});
+
+const buttonSignin = document.getElementById('buttonSignin');
+buttonSignin.addEventListener('click', function (data) {
+    doLogon();
+});
+
+const buttonSignout = document.getElementById('buttonSignout');
+buttonSignout.addEventListener('click', function (data) {
+    doLogoff();
+});
+
+const buttonExplore = document.getElementById('buttonExplore');
+buttonExplore.addEventListener('click', function (data) {
+    showExplorer();
 });
 
 
-//TODO: Pasemos todos los request a un js q los maneje 
-function verifyEndpoint(sUrl) {
-    const {
-        net
-    } = require('electron').remote;
-    sUrl += "/doorsversion"
-    const request = net.request(sUrl);
-    request.on('response', (response) => {
-        console.log(`STATUS: ${response.statusCode}`)
-        console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
-        response.on('data', (chunk) => {
-            alert("OK " + chunk);
-            enableInputsUI();
-        })
-        response.on('end', () => {
-            console.log('No more data in response.')
-        })
-    })
-    request.end();
+initPage();
+
+
+function initPage() {
+    if (settings.has('endpoint')) {
+        $("#inputEndpoint").val(settings.get("endpoint").value);
+        verifyIsLogged();
+    }
 }
 
-function enableInputsUI() {
-    $("#inputEndpoint").attr("disabled", "disabled");
-    $("#buttonVerifyEndpoint").attr("disabled", "disabled");
+function verifyIsLogged() {
+    if (settings.has('endpoint')) {
+        Doors.RESTFULL.ServerUrl = settings.get("endpoint").value;
+        if (settings.has('authToken')) {
+            var token = settings.get("authToken").value;
+            Doors.RESTFULL.AuthToken = token;
+            DoorsAPI.islogged().then(
+                function (bIslogged) {
+                    if (bIslogged) {
+                        $("#logonErrorMessage").addClass("d-none");
+                        $("#buttonSignout").removeClass("d-none");
+                        $("#buttonSignin").addClass("d-none");
+                        $("#buttonExplore").removeClass("d-none");
+                        setUserInputsUI();
+                    }
+                },
+                function (err) {
 
-    $("#inputUsername").removeAttr("disabled");
-    $("#inputPassword").removeAttr("disabled");
-    $("#inputInstance").removeAttr("disabled");
-    $("#buttonSignin").removeAttr("buttonSignin");
+                }
+            );
+        }
+    }
 }
+
+
+function verifyEndpoint() {
+    DoorsAPI.doorsVersion().then(
+        function () {
+            enableUserInputSection(true);
+        },
+        function (err) {
+            enableUserInputSection(false);
+        }
+    );
+}
+
+
+
+function doLogoff() {
+    DoorsAPI.logoff().then(
+        function (token) {
+            settings.set('authToken', {
+                value: ""
+            });
+            settings.set('loggerUser', {
+                value: ""
+            });
+            $("#buttonSignin").removeClass("d-none");
+            $("#buttonSignout").addClass("d-none");
+            $("#buttonExplore").addClass("d-none");
+        },
+        function (err) {
+            showError(err.ExceptionMessage);
+        }
+    );
+}
+
+function doLogon() {
+    var inputUsername = $('#inputUsername').val();
+    var inputPassword = $('#inputPassword').val();
+    var inputInstance = $('#inputInstance').val();
+    DoorsAPI.logon(inputUsername, inputPassword, inputInstance).then(function (token) {
+        Doors.RESTFULL.AuthToken = token;
+        $("#logonErrorMessage").addClass("d-none");
+        $("#buttonSignout").removeClass("d-none");
+        $("#buttonExplore").removeClass("d-none");
+        $("#buttonSignin").addClass("d-none");
+
+        settings.set('authToken', {
+            value: token
+        });
+        settings.set('endpoint', {
+            value: endpoint
+        });
+        settings.set('username', {
+            value: username
+        });
+        settings.set('password', {
+            value: password
+        });
+        settings.set('instance', {
+            value: instance
+        });
+
+        DoorsAPI.loggedUser().then(function (user) {
+            settings.set('loggerUser', {
+                value: user
+            });
+            //showExplorer();
+        }, function (err) {
+            console.log("Error on get loggedUser" + err.ExceptionMessage);
+        });
+    }, function (err) {
+        showError(err.ExceptionMessage);
+    });
+}
+
+
+function showError(message) {
+    $("#logonErrorMessage").removeClass("invisible");
+    $("#logonErrorMessage").html(message);
+}
+
+function setUserInputsUI() {
+    $("#inputUsername").val("");
+    if (settings.has("username")) {
+        $("#inputUsername").val(settings.get("username").value);
+    }
+    $("#inputPassword").val("");
+    if (settings.has("password")) {
+        $("#inputPassword").val(settings.get("password").value);
+    }
+    $("#inputInstance").val("");
+    if (settings.has("instance")) {
+        $("#inputInstance").val(settings.get("instance").value);
+    }
+}
+
+
 
 function closeApp() {
     ipc.sendSync('synchronous-message', "close-app");
 }
 
-function loadUserSettings() {
+function showExplorer() {
+    ipc.sendSync('synchronous-message', "open-explorer");
+}
 
-    if (settings.has('endpoint')) {
+function enableUserInputSection(value) {
+    if (value) {
+        $("#inputEndpoint").attr("disabled", "disabled");
+        $("#buttonVerifyEndpoint").addClass("d-none");
+        $("#buttonEditEndpoint").removeClass("d-none");
+        
+        $("#buttonVerifyEndpoint").attr("disabled", "disabled");
+        $("#inputUsername").removeAttr("disabled");
+        $("#inputPassword").removeAttr("disabled");
+        $("#inputInstance").removeAttr("disabled");
+        $("#buttonSignin").removeAttr("disabled");
 
+
+    } else {
+        $("#inputEndpoint").removeAttr("disabled");
+        $("#buttonVerifyEndpoint").removeClass("d-none");
+        $("#buttonEditEndpoint").addClass("d-none");
+
+        $("#buttonVerifyEndpoint").removeAttr("disabled");
+        $("#inputUsername").attr("disabled", "disabled");
+        $("#inputPassword").attr("disabled", "disabled");
+        $("#inputInstance").attr("disabled", "disabled");
+        $("#buttonSignin").attr("disabled", "disabled");
     }
-
-    if (settings.has('username')) {
-
-    }
-
-
-    if (settings.has('password')) {
-
-    }
-
-    if (settings.has('authToken')) {
-
-    }
-
-
-    /*  Example  
-    settings.set('name', {
-          first: 'Cosmo',
-          last: 'Kramer'
-        });
-       
-        settings.get('name.first');
-        // => "Cosmo"
-       
-        settings.has('name.middle');
-        */
 }

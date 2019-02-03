@@ -14,7 +14,7 @@ const {
 
 //Listen for app ready
 app.on('ready', function () {
-   loadMainWindow();
+   //loadMainWindow();
    loadLoginWindow(mainWindow);
 });
 
@@ -51,9 +51,13 @@ function loadLoginWindow(parentWindow) {
    loginWindow = new BrowserWindow({
       parent: parentWindow,
       width: 500,
-      height: 450,
-      frame: false,
-      modal: true
+      height: 550,
+      frame: true,
+      modal: true,
+      webPreferences: {
+         nodeIntegration: true,
+         defaultEncoding: 'UTF-8'
+      }
    });
    loginWindow.on('closed', (e) => {
       console.log(e);
@@ -75,6 +79,9 @@ ipcMain.on('synchronous-message', (event, arg) => {
       loginWindow.close();
       loginWindow = null;
       //app.quit();
+   }
+   if (arg == "open-explorer") {
+      loadMainWindow();
    }
 });
 
