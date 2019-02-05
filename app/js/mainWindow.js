@@ -47,10 +47,12 @@ function loadFoldersTree() {
 
 
 
-const monacoeditorsample = document.getElementById('monacoeditorsample');
+
+
+/*const monacoeditorsample = document.getElementById('monacoeditorsample');
 monacoeditorsample.addEventListener('click', function (data) {
    monacoEditorSampleWindow();
-});
+});*/
 
 
 
