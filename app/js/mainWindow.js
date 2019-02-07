@@ -24,6 +24,12 @@ var folderItemTemplate = `
 function loadFoldersTree() {
    DoorsAPI.foldersTree().then(
       function (arrFolders) {
+         _allFolders = arrFolders;
+         debugger;
+         var res = renderFoldersTree(1001);
+         console.log(res);
+         //$("#mCSB_1_container").html(res);
+         return;
          var arrSystemFolders = arrFolders.filter(function (node, index) {
             return (node.RootFolderId == 1);
          });
@@ -45,6 +51,28 @@ function loadFoldersTree() {
 }
 
 
+var parentWithChilds = "<a href='#[SUB_MENU_ID]' data-toggle='collapse aria-expanded='false' class='dropdown-toggle'>[FOLDER_DESCRIPTION]</a>";
+var parent = "<a href='#'>[FOLDER_DESCRIPTION]</a>";
+var content = "";
+var _allFolders;
+var _nexo = "<ul class='collapse list-unstyled components' id='[ITEM_RELATION]'><li>[CONTENT]</li></ul>";
+
+function renderFoldersTree(parentFolderId) {
+   var arrChilds = $.grep(_allFolders, function (f) {
+      return f.ParentFolder === parentFolderId;
+   });
+   for (var index = 0; index < arrChilds.length; index++) {
+      if (arrChilds[index].HaveFolders) {
+         var temporalContent = parentWithChilds.replace("[FOLDER_DESCRIPTION]", arrChilds[index].Name).replace("[SUB_MENU_ID]", "CHILDS_" + arrChilds[index].FldId);
+         content += _nexo.replace("[ITEM_RELATION]", "CHILDS_" + arrChilds[index].FldId).replace("[CONTENT]", temporalContent);
+         content += renderFoldersTree(arrChilds[index].FldId);
+      } else {
+         content += parent.replace("[FOLDER_DESCRIPTION]", arrChilds[index].Name);
+      }
+   }
+   return content;
+}
+
 
 
 
@@ -54,6 +82,10 @@ monacoeditorsample.addEventListener('click', function (data) {
    monacoEditorSampleWindow();
 });*/
 
+const monacoeditorsample = document.getElementById('test');
+monacoeditorsample.addEventListener('click', function (data) {
+   monacoEditorSampleWindow();
+});
 
 
 function monacoEditorSampleWindow(parentWindow) {
