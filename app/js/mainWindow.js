@@ -30,18 +30,6 @@ function loadFoldersTree() {
          console.log(res);
          //$("#mCSB_1_container").html(res);
          return;
-         var arrSystemFolders = arrFolders.filter(function (node, index) {
-            return (node.RootFolderId == 1);
-         });
-         var content = "";
-         arrSystemFolders.forEach(element => {
-            var sFolderDescription = element.Description;
-            if (sFolderDescription == "") {
-               sFolderDescription = element.Name;
-            }
-            content += folderItemTemplate.replace("[FOLDER_ID]", element.FldId).replace("[FOLDER_NAME]", element.Name).replace("[FOLDER_DESCRIPTION]", sFolderDescription);
-         });
-         $("#submenuSystemFolders").html(content);
       },
       function (err) {
          debugger;
