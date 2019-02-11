@@ -7,6 +7,8 @@ const settings = require('electron-settings');
 initPage();
 
 function initPage() {
+   console.log("los breckpoints no se disparan sin esto!");
+   debugger;
    //TODO: Validar esto si no existe o el token esta vencido cerrar y abrir el login 
    Doors.RESTFULL.ServerUrl = settings.get("endpoint").value;
    Doors.RESTFULL.AuthToken = settings.get("authToken").value;
@@ -22,6 +24,7 @@ var folderItemTemplate = `
 `;
 
 function loadFoldersTree() {
+   debugger;
    DoorsAPI.foldersTree().then(
       function (arrFolders) {
          _allFolders = arrFolders;
