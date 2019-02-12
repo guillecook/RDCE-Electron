@@ -41,6 +41,7 @@ function loadMainWindow() {
       protocol: 'file',
       slashes: true
    }));
+   mainWindow.webContents.openDevTools();
 }
 
 //Login window

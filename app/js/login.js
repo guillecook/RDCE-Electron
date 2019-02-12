@@ -8,12 +8,18 @@ const buttonVerifyEndpoint = document.getElementById('buttonVerifyEndpoint');
 buttonVerifyEndpoint.addEventListener('click', function (data) {
     var sEndpoint = $("#inputEndpoint").val();
     Doors.RESTFULL.ServerUrl = sEndpoint;
+    settings.set('endpoint', {
+        value: sEndpoint
+    });
     verifyEndpoint();
 });
 
 const buttonEditEndpoint = document.getElementById('buttonEditEndpoint');
 buttonEditEndpoint.addEventListener('click', function (data) {
     Doors.RESTFULL.ServerUrl = "";
+    settings.set('endpoint', {
+        value: ""
+    });
     enableUserInputSection(false);
 });
 
@@ -101,10 +107,11 @@ function doLogoff() {
 }
 
 function doLogon() {
-    var inputUsername = $('#inputUsername').val();
-    var inputPassword = $('#inputPassword').val();
-    var inputInstance = $('#inputInstance').val();
-    DoorsAPI.logon(inputUsername, inputPassword, inputInstance).then(function (token) {
+    debugger;
+    var username = $('#inputUsername').val();
+    var password = $('#inputPassword').val();
+    var instance = $('#inputInstance').val();
+    DoorsAPI.logon(username, password, instance).then(function (token) {
         Doors.RESTFULL.AuthToken = token;
         $("#logonErrorMessage").addClass("d-none");
         $("#buttonSignout").removeClass("d-none");
@@ -113,9 +120,6 @@ function doLogon() {
 
         settings.set('authToken', {
             value: token
-        });
-        settings.set('endpoint', {
-            value: endpoint
         });
         settings.set('username', {
             value: username
