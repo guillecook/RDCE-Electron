@@ -167,6 +167,9 @@ a.article:hover {
 .tab-pane-content{
     padding:16px;
 }
+.label-title{
+    font-weight: 700;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES

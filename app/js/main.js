@@ -80,7 +80,6 @@ const {
 } = require('electron');
 ipcMain.on('synchronous-message', (event, arg) => {
    if (arg == "close-app") {
-     
    }
    if (arg == "open-explorer") {
       loadMainWindow();
