@@ -13,7 +13,7 @@ function initPage() {
    Doors.RESTFULL.ServerUrl = settings.get("endpoint").value;
    Doors.RESTFULL.AuthToken = settings.get("authToken").value;
 
-   loadFoldersTree();
+   //loadFoldersTree();
 
 }
 
@@ -98,4 +98,8 @@ function monacoEditorSampleWindow(parentWindow) {
       protocol: 'file',
       slashes: true
    }));
+}
+
+function loadContent(fldId){
+
 }
