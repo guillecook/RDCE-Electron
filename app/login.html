@@ -24,26 +24,45 @@
         <form class="form-signin">
             <h4 class="form-signin-heading">Please sign in</h4>
             <hr />
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="inputEndpoint" placeholder="Restful endpoint" aria-label="Restful endpoint"
-                    aria-describedby="basic-addon2" value="" autofocus>
-                <div class="input-group-append">
-                    <button id="buttonVerifyEndpoint" class="btn btn-outline-primary" type="button">Go!</button>
-                    <button id="buttonEditEndpoint" class="btn btn-outline-primary d-none" type="button">Edit</button>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="inputEndpoint" placeholder="Restful endpoint"
+                            aria-label="Restful endpoint" aria-describedby="buttonVerifyEndpoint" value="" autofocus>
+                        <div class="input-group-append">
+                            <button id="buttonVerifyEndpoint" class="btn btn-outline-primary" type="button">Go!</button>
+                            <button id="buttonEditEndpoint" class="btn btn-outline-primary d-none" type="button">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="inputUsername" class="sr-only">Username</label>
+                    <input type="text" id="inputUsername" class="form-control" placeholder="Username" required disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
+                        disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="inputInstance" class="sr-only">Instance </label>
+                    <input type="text" id="inputInstance" class="form-control" placeholder="Instance name" required
+                        disabled>
                 </div>
             </div>
             <hr />
-            <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" id="inputUsername" class="form-control" placeholder="Username" required disabled>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required disabled>
-            <label for="inputInstance" class="sr-only">Password</label>
-            <input type="text" id="inputInstance" class="form-control" placeholder="Instance name" required disabled>
-            <hr />
-            <button class="btn btn-lg btn-primary btn-block" id="buttonSignin" type="button" disabled>Sign in</button>
-            <button class="btn btn-lg btn-secondary btn-block d-none" id="buttonSignout" type="button" >Sign out</button> 
-            <button class="btn btn-lg btn-primary btn-block d-none" id="buttonExplore" type="button" >Explore</button> 
-            <hr/> <div id="logonErrorMessage" class="alert alert-danger invisible" role="alert">
+            <div class="btn-bar">
+                <button class="btn btn-primary float-right" id="buttonSignin" type="button" disabled>Sign in</button>
+                <button class="btn btn-primary float-right d-none" id="buttonExplore" type="button">Explore</button>
+                <button class="btn btn-secondary float-right d-none" id="buttonSignout" type="button">Sign out</button>
+            </di>
+            <div id="logonErrorMessage" class="alert alert-danger invisible" role="alert">
             </div>
         </form>
 
