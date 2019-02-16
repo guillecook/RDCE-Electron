@@ -9,7 +9,7 @@ const folderInformationTabContent = `
 <label class="label-title">Modified: </label> <label id="folder-modified"></label><br />
 <hr />
 <label class="label-title">Type: </label> <label id="folder-type"></label><br />
-<label class="label-title">Type: </label> <label id="ffolder-form"></label><br />
+<label class="label-title">Form Id: </label> <label id="folder-form"></label><br />
 
 <label class="label-title">Target: </label> <label id="folder-target"></label><br />`
 
@@ -23,7 +23,7 @@ function fillFolderInfromation(container, folder) {
     $("#folder-created").html(folder.Created);
     $("#folder-modified").html(folder.Modified);
     $("#folder-type").html(folder.Type);
-    $("#folder-form").html(folder.Form);
+    $("#folder-form").html(folder.FrmId);
     $("#folder-target").html(folder.Target);
 }
 

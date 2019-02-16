@@ -170,6 +170,19 @@ a.article:hover {
 .label-title{
     font-weight: 700;
 }
+.img-circle-icon{
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+}
+
+.primary-text{
+    font-weight: 600;
+}
+
+.secondary-text{
+    font-weight: 200;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES

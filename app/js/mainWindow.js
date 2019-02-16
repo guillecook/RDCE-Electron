@@ -16,7 +16,8 @@ function initPage() {
    //TODO: Validar esto si no existe o el token esta vencido cerrar y abrir el login 
    Doors.RESTFULL.ServerUrl = settings.get("endpoint").value;
    Doors.RESTFULL.AuthToken = settings.get("authToken").value;
-
+   loadLoggedUser();
+   loadCurrentInstance();
    //loadFoldersTree();
 
 }
@@ -77,10 +78,10 @@ monacoeditorsample.addEventListener('click', function (data) {
    monacoEditorSampleWindow();
 });*/
 
-const monacoeditorsample = document.getElementById('test');
+/*const monacoeditorsample = document.getElementById('test');
 monacoeditorsample.addEventListener('click', function (data) {
    monacoEditorSampleWindow();
-});
+});*/
 
 const folder_id_input_text = document.getElementById('folder-id-input-test');
 folder_id_input_text.addEventListener('change', function (data) {
@@ -93,11 +94,13 @@ function loadFolder(folderId) {
    DoorsAPI.foldersGetFromId(folderId).then(
       function (folder) {
          fillFolderInfromation($("#folder"), folder);
+         loadForm(folder.FrmId);
       },
       function (err) {
          showErrorDialog(err);
       }
    );
+
    DoorsAPI.folderAsyncEvents(folderId).then(
       function (asyncEvents) {
          fillFolderAsyncEvents($("#asyncEvents"), asyncEvents);
@@ -115,10 +118,78 @@ function loadFolder(folderId) {
          showErrorDialog(err);
       }
    );
+   const defaultFields = "doc_id, created, modified";
+   const defaultFormula = "";
+   const defaultOrder = "";
+   const defaultMaxDocs = 500;
+   const defaultRecursive = false;
+   const defaultMaxDescriptionLength = 100;
+   /*DoorsAPI.folderSearch(folderId, fields, formula, order, maxDocs, recursive, maxDescrLength).then(
+      function (documents) {
+         //fillFolderSyncEvents($("#syncEvents"), syncEvents);
+      },
+      function (err) {
+         showErrorDialog(err);
+      });
+      */
+}
 
+function loadForm(formId) {
+   if (formId) {
+      DoorsAPI.formsGetById(formId).then(
+         function (form) {
+            console.log(form);
+            //Aca llamar al seaarch del forlder despues de saber que campos tengo que buscar
+         },
+         function (err) {
+            showErrorDialog(err);
+         }
+      );
+   }
 }
 
 
+
+function showErrorDialog(err) {
+   console.log(err);
+   if (!$("#informationDialog").hasClass("show")) {
+      $("#informationDialog .modal-body").html("Message: " + err.Message + "</br> Method: " + err.Method);
+      $("#informationDialog-button").click();
+   } else {
+      $("#informationDialog .modal-body").html($("#informationDialog .modal-body").html() + "<hr/>Message: " + err.Message + "<br/> Method: " + err.Method);
+   }
+}
+
+function loadLoggedUser() {
+   DoorsAPI.loggedUser().then(
+      
+      function (user) {
+         console.log(user);
+         var url = Doors.RESTFULL.ServerUrl + "/accounts/"+user.AccId+"/picture";
+         $("#logged-user-profile-icon").attr("src",url);
+         $("#logged-user-name").html(user.FullName);
+      },
+      function (err) {
+         console.log("Error logged user " + err);
+      });
+}
+function loadCurrentInstance() {
+   DoorsAPI.currentInstance().then(
+      function (instance) {
+         console.log(instance);
+         $("#instance-description").html(instance.Description);
+         $("#instance-name").html(instance.Name);
+         //$("#instance-id").html(instance.InsId);
+      },
+      function (err) {
+         console.log("Error current instance " + err);
+      });
+}
+
+
+
+
+/**To Test */
 function monacoEditorSampleWindow(parentWindow) {
    let monacoEditorSampleWindow;
    monacoEditorSampleWindow = new BrowserWindow({
@@ -138,14 +209,4 @@ function monacoEditorSampleWindow(parentWindow) {
       protocol: 'file',
       slashes: true
    }));
-}
-
-function showErrorDialog(err) {
-   console.log(err);
-   if(!$("#informationDialog").hasClass("show")){
-      $("#informationDialog .modal-body").html("Message: " + err.Message + "</br> Method: " + err.Method);
-      $("#informationDialog-button").click();
-   }else{
-      $("#informationDialog .modal-body").html($("#informationDialog .modal-body").html()+ "<hr/>Message: " + err.Message + "<br/> Method: " + err.Method);
-   }
 }
