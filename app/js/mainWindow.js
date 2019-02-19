@@ -34,7 +34,7 @@ function loadFoldersTree() {
             levels: 5,
             expandIcon: "fa fa-plus fa-xs",
             collapseIcon: "fa fa-minus fa-xs",
-            onNodeSelected: function(event, data) {
+            onNodeSelected: function (event, data) {
                loadFolder(data.id);
             }
          });
@@ -152,6 +152,7 @@ function loadCurrentInstance() {
 }
 
 var jsonTreeResult = [{
+      id: 1,
       text: "Carpetas de Sistema",
       color: "inherit",
       backColor: "transparent",
@@ -165,7 +166,7 @@ var jsonTreeResult = [{
       nodes: []
    },
    {
-
+      id: 1001,
       text: "Carpetas Publicas",
       color: "inherit",
       backColor: "transparent",
