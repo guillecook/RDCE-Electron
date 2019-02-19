@@ -51,6 +51,8 @@ var knowFormFields = {
  * @param formGuid guid id del formulario
  */
 function getKnowFields(formGuid) {
+    debugger;
+    formGuid = formGuid.replaceAll("-","");
     var fields = "";
     $.each(knowFormFields, function (i, v) {
         if (v[0].guid.toString().toUpperCase() == formGuid.toString().toUpperCase()) {

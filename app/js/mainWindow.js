@@ -52,7 +52,7 @@ function loadFolder(folderId) {
    DoorsAPI.foldersGetFromId(folderId).then(
       function (folder) {
          fillFolderInfromation($("#folder"), folder);
-         loadForm(folder.FrmId);
+         loadForm(folder.FrmId, folderId);
       },
       function (err) {
          showErrorDialog(err);
@@ -76,34 +76,46 @@ function loadFolder(folderId) {
          showErrorDialog(err);
       }
    );
-   const defaultFields = "doc_id, created, modified";
-   const defaultFormula = "";
-   const defaultOrder = "";
-   const defaultMaxDocs = 500;
-   const defaultRecursive = false;
-   const defaultMaxDescriptionLength = 100;
-   /*DoorsAPI.folderSearch(folderId, fields, formula, order, maxDocs, recursive, maxDescrLength).then(
-      function (documents) {
-         //fillFolderSyncEvents($("#syncEvents"), syncEvents);
-      },
-      function (err) {
-         showErrorDialog(err);
-      });
-      */
+
 }
 
-function loadForm(formId) {
+function loadForm(formId, folderId) {
    if (formId) {
       DoorsAPI.formsGetById(formId).then(
          function (form) {
-            console.log(form);
-            //Aca llamar al seaarch del forlder despues de saber que campos tengo que buscar
+            var fields = getKnowFields(form.Guid);
+            //Aca llamar al search del forlder despues de saber que campos tengo que buscar
+            if (fields != "") {
+               documentSearch(folderId, fields);
+            }
          },
          function (err) {
             showErrorDialog(err);
          }
       );
    }
+}
+
+function documentSearch(folderId, jsonFields) {
+   const defaultFields = "doc_id, created, modified";
+   const defaultFormula = "";
+   const defaultOrder = "";
+   const defaultMaxDocs = 500;
+   const defaultRecursive = false;
+   const defaultMaxDescriptionLength = 100;
+   var sFields = "";
+   for(var index=0; index < jsonFields.length; index++){
+      if(sFields!=""){ sFields+= ",";}
+      sFields+=jsonFields[index].name;
+   }
+   DoorsAPI.folderSearch(folderId, sFields, defaultFormula, defaultOrder, defaultMaxDocs, defaultRecursive, defaultMaxDescriptionLength).then(
+      function (documents) {
+         debugger;
+         fillDocuments($("#documentts"), documents, jsonFields);
+      },
+      function (err) {
+         showErrorDialog(err);
+      });
 }
 
 function showErrorDialog(err) {
