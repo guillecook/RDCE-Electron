@@ -12,7 +12,8 @@ var knowFormFields = {
                     name: "control"
                 },
                 {
-                    name: "scriptbeforerender"
+                    name: "scriptbeforerender",
+                    isCodeColumn: true
                 },
                 {
                     name: "created"
@@ -32,7 +33,8 @@ var knowFormFields = {
                     name: "name"
                 },
                 {
-                    name: "code"
+                    name: "code",
+                    isCodeColumn: true
                 },
                 {
                     name: "created"

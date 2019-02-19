@@ -19,7 +19,6 @@ function initPage() {
    loadLoggedUser();
    loadCurrentInstance();
    loadFoldersTree();
-
 }
 
 
@@ -106,15 +105,18 @@ function documentSearch(folderId, jsonFields) {
    const defaultRecursive = false;
    const defaultMaxDescriptionLength = 100;
    var sFields = "";
+   var sCodeColumnName = ""
    for(var index=0; index < jsonFields.length; index++){
       if(sFields!=""){ sFields+= ",";}
       sFields+=jsonFields[index].name;
+      if (jsonFields[index].isCodeColumn){
+         sCodeColumnName = jsonFields[index].name;
+      }
    }
-   debugger;
    if (sFields==""){ sFields = defaultFields;  }
    DoorsAPI.folderSearch(folderId, sFields, defaultFormula, defaultOrder, defaultMaxDocs, defaultRecursive, defaultMaxDescriptionLength).then(
       function (documents) {
-         fillDocuments($("#documentts"), documents, jsonFields);
+         fillDocuments($("#documentts"), documents, jsonFields, sCodeColumnName);
       },
       function (err) {
          showErrorDialog(err);
@@ -221,6 +223,10 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
    }
 }
 
+const buttonTest = document.getElementById('buttont_test');
+buttonTest.addEventListener('click', function (data) {
+    monacoEditorSampleWindow();
+});
 
 
 /**To Test */

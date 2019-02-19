@@ -150,8 +150,7 @@ const documentsTabContent = `
 Listado de documentos
 <div id="documeents-table"></div>`
 
-function fillDocuments(container, documentFields, arrFields) {
-    debugger;
+function fillDocuments(container, documentFields, arrFields, codeColumnName) {
     $("#documents-tab").removeClass("d-none");
     container.html(documentsTabContent);
     var _columns = [];
@@ -161,15 +160,20 @@ function fillDocuments(container, documentFields, arrFields) {
             field: arrFields[index].name.toUpperCase(),
         });
     }
-
+    $("#documents-table").attr("code-column-name", codeColumnName);
     var documentsTable = new Tabulator("#documents-table", {
+            
         height: "811px",
         layout: "fitColumns",
         columns: _columns,
         initialSort: [{
             column: "doc_id",
             dir: "asc"
-        }, ]
+        }, ],
+        rowDblClick: function (e, row) {
+            var codeColumn = $("#documents-table").attr("code-column-name");
+            alert(row.getCell("DOC_ID").getValue() + " Code column to open: "+ codeColumn);
+        },
     });
     // ? Porque vienen en mayusculas las propiedades de los fields?
     documentsTable.setData(documentFields);
