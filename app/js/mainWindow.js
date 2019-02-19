@@ -18,7 +18,7 @@ function initPage() {
    Doors.RESTFULL.AuthToken = settings.get("authToken").value;
    loadLoggedUser();
    loadCurrentInstance();
-   //loadFoldersTree();
+   loadFoldersTree();
 
 }
 
@@ -33,10 +33,15 @@ function loadFoldersTree() {
    DoorsAPI.foldersTree().then(
       function (arrFolders) {
          _allFolders = arrFolders;
-         debugger;
-         var res = renderFoldersTree(1001);
-         console.log(res);
-         //$("#mCSB_1_container").html(res);
+         console.log(arrFolders);
+         buildJsonTreeSource(1001, jsonTreeResult[1]);
+         $('#tree').treeview({
+            data: jsonTreeResult,
+            levels: 5,
+            expandIcon: "fa fa-plus",
+            collapseIcon: "fa fa-minus",
+         });
+         console.log(jsonTreeResult);
          return;
       },
       function (err) {
@@ -47,41 +52,6 @@ function loadFoldersTree() {
 }
 
 
-var parentWithChilds = "<a href='#[SUB_MENU_ID]' data-toggle='collapse aria-expanded='false' class='dropdown-toggle'>[FOLDER_DESCRIPTION]</a>";
-var parent = "<a href='#'>[FOLDER_DESCRIPTION]</a>";
-var content = "";
-var _allFolders;
-var _nexo = "<ul class='collapse list-unstyled components' id='[ITEM_RELATION]'><li>[CONTENT]</li></ul>";
-
-function renderFoldersTree(parentFolderId) {
-   var arrChilds = $.grep(_allFolders, function (f) {
-      return f.ParentFolder === parentFolderId;
-   });
-   for (var index = 0; index < arrChilds.length; index++) {
-      if (arrChilds[index].HaveFolders) {
-         var temporalContent = parentWithChilds.replace("[FOLDER_DESCRIPTION]", arrChilds[index].Name).replace("[SUB_MENU_ID]", "CHILDS_" + arrChilds[index].FldId);
-         content += _nexo.replace("[ITEM_RELATION]", "CHILDS_" + arrChilds[index].FldId).replace("[CONTENT]", temporalContent);
-         content += renderFoldersTree(arrChilds[index].FldId);
-      } else {
-         content += parent.replace("[FOLDER_DESCRIPTION]", arrChilds[index].Name);
-      }
-   }
-   return content;
-}
-
-
-
-
-
-/*const monacoeditorsample = document.getElementById('monacoeditorsample');
-monacoeditorsample.addEventListener('click', function (data) {
-   monacoEditorSampleWindow();
-});*/
-
-/*const monacoeditorsample = document.getElementById('test');
-monacoeditorsample.addEventListener('click', function (data) {
-   monacoEditorSampleWindow();
-});*/
 
 const folder_id_input_text = document.getElementById('folder-id-input-test');
 folder_id_input_text.addEventListener('change', function (data) {
@@ -162,17 +132,18 @@ function showErrorDialog(err) {
 
 function loadLoggedUser() {
    DoorsAPI.loggedUser().then(
-      
+
       function (user) {
          console.log(user);
-         var url = Doors.RESTFULL.ServerUrl + "/accounts/"+user.AccId+"/picture";
-         $("#logged-user-profile-icon").attr("src",url);
+         var url = Doors.RESTFULL.ServerUrl + "/accounts/" + user.AccId + "/picture";
+         $("#logged-user-profile-icon").attr("src", url);
          $("#logged-user-name").html(user.FullName);
       },
       function (err) {
          console.log("Error logged user " + err);
       });
 }
+
 function loadCurrentInstance() {
    DoorsAPI.currentInstance().then(
       function (instance) {
@@ -209,4 +180,109 @@ function monacoEditorSampleWindow(parentWindow) {
       protocol: 'file',
       slashes: true
    }));
+}
+
+var jsonTreeResult = [{
+    
+      text: "Carpetas de Sistema",
+      color: "inherit",
+      backColor: "transparent",
+      selectable: true,
+      state: {
+         checked: false,
+         disabled: false,
+         expanded: false,
+         selected: false
+       },
+      nodes: null
+   },
+   {
+      
+      text: "Carpetas Publicas",
+      color: "inherit",
+      backColor: "transparent",
+      selectable: true,
+      state: {
+         checked: false,
+         disabled: false,
+         expanded: false,
+         selected: false
+       },
+      nodes: []
+   }
+];
+
+function buildJsonTreeSource(parentFolderId, parentNode) {
+   var arrChilds = $.grep(_allFolders, function (f) {
+      return f.ParentFolder === parentFolderId;
+   });
+   for (var index = 0; index < arrChilds.length; index++) {
+      var jsonFolder = arrChilds[index];
+      var tempIcon = "";
+      var tempSelectedIcon = "";
+
+      if (jsonFolder.HaveFolders) {
+        // tempIcon = "fa fa-plus";
+        // tempSelectedIcon =  "fa fa-minus";
+      }
+      var tempNode = {
+         id: jsonFolder.FldId,
+         text: jsonFolder.Name,
+         icon: tempIcon,
+         selectedIcon: tempSelectedIcon,
+         selectable: true,
+         color: "inherit",
+         backColor: "transparent",
+         state: {
+            checked: false,
+            disabled: false,
+            expanded: false,
+            selected: false
+          },
+         nodes: []
+      }
+      parentNode.nodes.push(tempNode);
+      if (jsonFolder.HaveFolders) {
+         buildJsonTreeSource(jsonFolder.FldId, tempNode);
+      }
+   }
+}
+
+function getTree() {
+   // Some logic to retrieve, or generate tree structure
+   return [{
+         text: "Parent 1",
+         icon: "fa fa-plus",
+         selectedIcon: "fa fa-minus",
+         color: "inherit",
+         backColor: "transparent",
+
+         nodes: [{
+               text: "Child 1",
+               nodes: [{
+                     text: "Grandchild 1"
+                  },
+                  {
+                     text: "Grandchild 2"
+                  }
+               ]
+            },
+            {
+               text: "Child 2"
+            }
+         ]
+      },
+      {
+         text: "Parent 2"
+      },
+      {
+         text: "Parent 3"
+      },
+      {
+         text: "Parent 4"
+      },
+      {
+         text: "Parent 5"
+      }
+   ];
 }
