@@ -47,16 +47,8 @@ function loadFoldersTree() {
    );
 }
 
-
-
-const folder_id_input_text = document.getElementById('folder-id-input-test');
-folder_id_input_text.addEventListener('change', function (data) {
-   var fld_id = document.getElementById('folder-id-input-test').value;
-   if (fld_id != "")
-      loadFolder(fld_id);
-});
-
 function loadFolder(folderId) {
+   hideAllTabs();
    DoorsAPI.foldersGetFromId(folderId).then(
       function (folder) {
          fillFolderInfromation($("#folder"), folder);

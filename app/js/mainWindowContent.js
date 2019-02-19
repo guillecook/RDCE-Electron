@@ -12,8 +12,21 @@ const folderInformationTabContent = `
 <label class="label-title">Form Id: </label> <label id="folder-form"></label><br />
 
 <label class="label-title">Target: </label> <label id="folder-target"></label><br />`
+function loadActiveTab(){
+    $("#folder-tab").click();
+}
+
+function hideAllTabs(){
+    $("#documents-tab").addClass("d-none");
+    $("#syncEvents-tab").addClass("d-none");
+    $("#asyncEvents-tab").addClass("d-none");
+    $("#views-tab").addClass("d-none");
+    $("#folder-tab").addClass("d-none");
+}
 
 function fillFolderInfromation(container, folder) {
+    loadActiveTab();
+    $("#folder-tab").removeClass("d-none");
     console.log(folder);
     container.html(folderInformationTabContent);
     $("#folder-id").html(folder.FldId);
@@ -33,6 +46,7 @@ Listado de eventos asincronos
 <div id="asyncEvents-table"></div>`
 
 function fillFolderAsyncEvents(container, asyncEvents) {
+    $("#asyncEvents-tab").removeClass("d-none");    
     console.log(asyncEvents);
     container.html(folderAsyncEventsTabContent);
     var asyncEventsTable = new Tabulator("#asyncEvents-table", {
@@ -91,6 +105,7 @@ Listado de eventos sincronos
 <div id="syncEvents-table"></div>`
 
 function fillFolderSyncEvents(container, syncEvents) {
+    $("#syncEvents-tab").removeClass("d-none");    
     console.log(syncEvents);
     container.html(folderSyncEventsTabContent);
     var syncEventsTable = new Tabulator("#syncEvents-table", {
