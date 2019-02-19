@@ -29,11 +29,10 @@ var folderItemTemplate = `
 `;
 
 function loadFoldersTree() {
-   debugger;
    DoorsAPI.foldersTree().then(
       function (arrFolders) {
          _allFolders = arrFolders;
-         console.log(arrFolders);
+         buildJsonTreeSource(1, jsonTreeResult[0]);
          buildJsonTreeSource(1001, jsonTreeResult[1]);
          $('#tree').treeview({
             data: jsonTreeResult,
@@ -41,7 +40,6 @@ function loadFoldersTree() {
             expandIcon: "fa fa-plus fa-xs",
             collapseIcon: "fa fa-minus fa-xs",
          });
-         console.log(jsonTreeResult);
          return;
       },
       function (err) {
