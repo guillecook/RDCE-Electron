@@ -45,6 +45,23 @@ var knowFormFields = {
     ]
 };
 
+var defaultDocumentsFields = {
+    fields: [{
+            name: "doc_id"
+        },
+        {
+            name: "subject"
+        },
+        {
+            name: "created"
+        },
+        {
+            name: "modified"
+        }
+    ]
+};
+
+
 
 /** 
  * getFieldsFromForm
@@ -56,11 +73,15 @@ var knowFormFields = {
 function getKnowFields(formGuid) {
     formGuid = formGuid.replaceAll("-", "");
     var fields = "";
-    $.each(knowFormFields, function (i, v) {
-        if (v[0].guid.toString().toUpperCase() == formGuid.toString().toUpperCase()) {
-            fields = v[0].fields;
-            return;
+    for (var index = 0; index < knowFormFields.forms.length; index++) {
+        if (knowFormFields.forms[index].guid.toString().toUpperCase() == formGuid.toString().toUpperCase()) {
+            fields = knowFormFields.forms[index].fields;
+            break;
         }
-    });
+    }
     return fields;
+}
+
+function getDefaultFields() {
+    return defaultDocumentsFields.fields;
 }

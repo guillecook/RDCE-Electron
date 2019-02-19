@@ -151,7 +151,7 @@ Listado de documentos
 <div id="documeents-table"></div>`
 
 function fillDocuments(container, documentFields, arrFields) {
-    
+    debugger;
     $("#documents-tab").removeClass("d-none");
     container.html(documentsTabContent);
     var _columns = [];

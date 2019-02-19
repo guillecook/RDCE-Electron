@@ -85,9 +85,10 @@ function loadForm(formId, folderId) {
          function (form) {
             var fields = getKnowFields(form.Guid);
             //Aca llamar al search del forlder despues de saber que campos tengo que buscar
-            if (fields != "") {
-               documentSearch(folderId, fields);
+            if (fields == "") {
+               fields = getDefaultFields();
             }
+            documentSearch(folderId, fields);
          },
          function (err) {
             showErrorDialog(err);
@@ -98,6 +99,7 @@ function loadForm(formId, folderId) {
 
 function documentSearch(folderId, jsonFields) {
    const defaultFields = "doc_id, created, modified";
+
    const defaultFormula = "";
    const defaultOrder = "";
    const defaultMaxDocs = 500;
@@ -108,6 +110,8 @@ function documentSearch(folderId, jsonFields) {
       if(sFields!=""){ sFields+= ",";}
       sFields+=jsonFields[index].name;
    }
+   debugger;
+   if (sFields==""){ sFields = defaultFields;  }
    DoorsAPI.folderSearch(folderId, sFields, defaultFormula, defaultOrder, defaultMaxDocs, defaultRecursive, defaultMaxDescriptionLength).then(
       function (documents) {
          fillDocuments($("#documentts"), documents, jsonFields);
@@ -216,7 +220,6 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
       }
    }
 }
-
 
 
 
