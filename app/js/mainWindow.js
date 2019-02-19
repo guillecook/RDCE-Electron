@@ -38,8 +38,8 @@ function loadFoldersTree() {
          $('#tree').treeview({
             data: jsonTreeResult,
             levels: 5,
-            expandIcon: "fa fa-plus",
-            collapseIcon: "fa fa-minus",
+            expandIcon: "fa fa-plus fa-xs",
+            collapseIcon: "fa fa-minus fa-xs",
          });
          console.log(jsonTreeResult);
          return;
@@ -183,7 +183,7 @@ function monacoEditorSampleWindow(parentWindow) {
 }
 
 var jsonTreeResult = [{
-    
+
       text: "Carpetas de Sistema",
       color: "inherit",
       backColor: "transparent",
@@ -193,11 +193,11 @@ var jsonTreeResult = [{
          disabled: false,
          expanded: false,
          selected: false
-       },
-      nodes: null
+      },
+      nodes: []
    },
    {
-      
+
       text: "Carpetas Publicas",
       color: "inherit",
       backColor: "transparent",
@@ -207,7 +207,7 @@ var jsonTreeResult = [{
          disabled: false,
          expanded: false,
          selected: false
-       },
+      },
       nodes: []
    }
 ];
@@ -218,18 +218,15 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
    });
    for (var index = 0; index < arrChilds.length; index++) {
       var jsonFolder = arrChilds[index];
-      var tempIcon = "";
-      var tempSelectedIcon = "";
+      var haveNodes = null;
 
       if (jsonFolder.HaveFolders) {
-        // tempIcon = "fa fa-plus";
-        // tempSelectedIcon =  "fa fa-minus";
+         haveNodes = [];
       }
       var tempNode = {
          id: jsonFolder.FldId,
          text: jsonFolder.Name,
-         icon: tempIcon,
-         selectedIcon: tempSelectedIcon,
+         icon: "fa " + jsonFolder.IconVector + " fa-xs",
          selectable: true,
          color: "inherit",
          backColor: "transparent",
@@ -238,8 +235,8 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
             disabled: false,
             expanded: false,
             selected: false
-          },
-         nodes: []
+         },
+         nodes: haveNodes
       }
       parentNode.nodes.push(tempNode);
       if (jsonFolder.HaveFolders) {
