@@ -110,7 +110,6 @@ function documentSearch(folderId, jsonFields) {
    }
    DoorsAPI.folderSearch(folderId, sFields, defaultFormula, defaultOrder, defaultMaxDocs, defaultRecursive, defaultMaxDescriptionLength).then(
       function (documents) {
-         debugger;
          fillDocuments($("#documentts"), documents, jsonFields);
       },
       function (err) {

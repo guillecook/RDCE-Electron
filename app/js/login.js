@@ -107,7 +107,6 @@ function doLogoff() {
 }
 
 function doLogon() {
-    debugger;
     var username = $('#inputUsername').val();
     var password = $('#inputPassword').val();
     var instance = $('#inputInstance').val();

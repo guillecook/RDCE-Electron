@@ -1,45 +1,48 @@
 var knowFormFields = {
     forms: [{
-        guid: "EAC99A4211204E1D8EEFEB8273174AC4",
-        name: "controls", //doc_id,name,control,scriptbeforerender,created,modified
-        fields: [{
-                name: "doc_id"
-            },
-            {
-                name: "name"
-            },
-            {
-                name: "control"
-            },
-            {
-                name: "scriptbeforerender"
-            },
-            {
-                name: "created"
-            },
-            {
-                name: "modified"
-            }
-        ],
-        guid: "F89ECD42FAFF48FDA229E4D5C5F433ED",
-        name: "codelib", //doc_id,name,code,created,modified
-        fields: [{
-                name: "doc_id"
-            },
-            {
-                name: "name"
-            },
-            {
-                name: "code"
-            },
-            {
-                name: "created"
-            },
-            {
-                name: "modified"
-            }
-        ]
-    }]
+            guid: "EAC99A4211204E1D8EEFEB8273174AC4",
+            name: "controls", //doc_id,name,control,scriptbeforerender,created,modified
+            fields: [{
+                    name: "doc_id"
+                },
+                {
+                    name: "name"
+                },
+                {
+                    name: "control"
+                },
+                {
+                    name: "scriptbeforerender"
+                },
+                {
+                    name: "created"
+                },
+                {
+                    name: "modified"
+                }
+            ]
+        },
+        {
+            guid: "F89ECD42FAFF48FDA229E4D5C5F433ED",
+            name: "codelib", //doc_id,name,code,created,modified
+            fields: [{
+                    name: "doc_id"
+                },
+                {
+                    name: "name"
+                },
+                {
+                    name: "code"
+                },
+                {
+                    name: "created"
+                },
+                {
+                    name: "modified"
+                }
+            ]
+        }
+    ]
 };
 
 
@@ -51,8 +54,7 @@ var knowFormFields = {
  * @param formGuid guid id del formulario
  */
 function getKnowFields(formGuid) {
-    debugger;
-    formGuid = formGuid.replaceAll("-","");
+    formGuid = formGuid.replaceAll("-", "");
     var fields = "";
     $.each(knowFormFields, function (i, v) {
         if (v[0].guid.toString().toUpperCase() == formGuid.toString().toUpperCase()) {
