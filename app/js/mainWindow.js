@@ -22,11 +22,6 @@ function initPage() {
 
 }
 
-var folderItemTemplate = `
-<a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-   <span class="menu-collapsed" folder_id="[FOLDER_ID]" folder_name="[FOLDER_NAME]" >[FOLDER_DESCRIPTION]</span>
-</a>
-`;
 
 function loadFoldersTree() {
    DoorsAPI.foldersTree().then(
@@ -39,6 +34,9 @@ function loadFoldersTree() {
             levels: 5,
             expandIcon: "fa fa-plus fa-xs",
             collapseIcon: "fa fa-minus fa-xs",
+            onNodeSelected: function(event, data) {
+               loadFolder(data.id);
+            }
          });
          return;
       },
@@ -116,8 +114,6 @@ function loadForm(formId) {
    }
 }
 
-
-
 function showErrorDialog(err) {
    console.log(err);
    if (!$("#informationDialog").hasClass("show")) {
@@ -155,33 +151,7 @@ function loadCurrentInstance() {
       });
 }
 
-
-
-
-/**To Test */
-function monacoEditorSampleWindow(parentWindow) {
-   let monacoEditorSampleWindow;
-   monacoEditorSampleWindow = new BrowserWindow({
-      parent: parentWindow,
-      width: 500,
-      height: 450,
-      frame: true,
-      modal: true
-   });
-   monacoEditorSampleWindow.on('closed', (e) => {
-      console.log(e);
-      debugger;
-      //monacoEditorSampleWindow = null
-   });
-   monacoEditorSampleWindow.loadURL(url.format({
-      pathname: path.join(__dirname, '../monacoeditorsample.html'),
-      protocol: 'file',
-      slashes: true
-   }));
-}
-
 var jsonTreeResult = [{
-
       text: "Carpetas de Sistema",
       color: "inherit",
       backColor: "transparent",
@@ -209,7 +179,7 @@ var jsonTreeResult = [{
       nodes: []
    }
 ];
-
+/* https://github.com/jonmiles/bootstrap-treeview*/
 function buildJsonTreeSource(parentFolderId, parentNode) {
    var arrChilds = $.grep(_allFolders, function (f) {
       return f.ParentFolder === parentFolderId;
@@ -243,41 +213,27 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
    }
 }
 
-function getTree() {
-   // Some logic to retrieve, or generate tree structure
-   return [{
-         text: "Parent 1",
-         icon: "fa fa-plus",
-         selectedIcon: "fa fa-minus",
-         color: "inherit",
-         backColor: "transparent",
 
-         nodes: [{
-               text: "Child 1",
-               nodes: [{
-                     text: "Grandchild 1"
-                  },
-                  {
-                     text: "Grandchild 2"
-                  }
-               ]
-            },
-            {
-               text: "Child 2"
-            }
-         ]
-      },
-      {
-         text: "Parent 2"
-      },
-      {
-         text: "Parent 3"
-      },
-      {
-         text: "Parent 4"
-      },
-      {
-         text: "Parent 5"
-      }
-   ];
+
+
+/**To Test */
+function monacoEditorSampleWindow(parentWindow) {
+   let monacoEditorSampleWindow;
+   monacoEditorSampleWindow = new BrowserWindow({
+      parent: parentWindow,
+      width: 500,
+      height: 450,
+      frame: true,
+      modal: true
+   });
+   monacoEditorSampleWindow.on('closed', (e) => {
+      console.log(e);
+      debugger;
+      //monacoEditorSampleWindow = null
+   });
+   monacoEditorSampleWindow.loadURL(url.format({
+      pathname: path.join(__dirname, '../monacoeditorsample.html'),
+      protocol: 'file',
+      slashes: true
+   }));
 }
