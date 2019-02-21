@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,9 +40,13 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
-                        disabled>
+                    <div class="input-group" >
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
+                            >
+                        <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-primary fa fa-eye-slash" aria-hidden="true" id="buttonShowHidePassword"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
@@ -56,9 +61,9 @@
                 <button class="btn btn-primary float-right" id="buttonSignin" type="button" disabled>Sign in</button>
                 <button class="btn btn-primary float-right d-none" id="buttonExplore" type="button">Explore</button>
                 <button class="btn btn-secondary float-right d-none" id="buttonSignout" type="button">Sign out</button>
-            </di>
-            <div id="logonErrorMessage" class="alert alert-danger invisible" role="alert">
-            </div>
+                </di>
+                <div id="logonErrorMessage" class="alert alert-danger invisible" role="alert">
+                </div>
         </form>
 
     </div> <!-- /container -->

@@ -38,6 +38,20 @@ buttonExplore.addEventListener('click', function (data) {
     showExplorer();
 });
 
+const buttonShowHidePassword = document.getElementById('buttonShowHidePassword');
+buttonShowHidePassword.addEventListener('click', function (data) {
+    if($(buttonShowHidePassword).hasClass("fa-eye-slash")){
+        $(buttonShowHidePassword).removeClass("fa-eye-slash");
+        $(buttonShowHidePassword).addClass("fa-eye");
+        $("#inputPassword").attr("type", "text");
+    }
+    else{
+        $(buttonShowHidePassword).addClass("fa-eye-slash");
+        $(buttonShowHidePassword).removeClass("fa-eye");
+        $("#inputPassword").attr("type", "password");
+    }
+
+});
 
 initPage();
 
