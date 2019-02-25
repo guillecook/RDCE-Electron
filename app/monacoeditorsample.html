@@ -3,44 +3,124 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Monaco Editor!</title>
+        <script type="text/javascript" src="js/vbscript.js" ></script>
 	</head>
 	<body>
 		<h1>Monaco Editor in Electron!</h1>
 		<div id="container" style="width:500px;height:300px;border:1px solid #ccc"></div>
+
+        <pre id="langDef">
+        </pre>
 	</body>
 
 	<script>
-	(function() {
-		const path = require('path');
-		const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
-		const amdRequire = amdLoader.require;
-		const amdDefine = amdLoader.require.define;
+        var currentEditor = null;
+        var currentViewState = null;
+        var vbLangString = null;
 
-		function uriFromPath(_path) {
-			var pathName = path.resolve(_path).replace(/\\/g, '/');
-			if (pathName.length > 0 && pathName.charAt(0) !== '/') {
-				pathName = '/' + pathName;
-			}
-			return encodeURI('file://' + pathName);
-		}
+        const fs = require("fs");
 
-		amdRequire.config({
-			baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min'))
-		});
+        // Asynchronous read
+        fs.readFile('app/js/vbscript.txt', function (err, data) {
+            //debugger;
+            if (err) {
+                return console.error(err);
+            }
+            //console.log("Asynchronous read: " + data.toString());
+            vbLangString = data.toString();
+        });
 
-		// workaround monaco-css not understanding the environment
-		self.module = undefined;
+        (function () {
+            const path = require('path');
+            const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
 
-		amdRequire(['vs/editor/editor.main'], function() {
-			var editor = monaco.editor.create(document.getElementById('container'), {
-				value: [
-					'function x() {',
-					'\tconsole.log("Hello world!");',
-					'}'
-				].join('\n'),
-				language: 'javascript'
-			});
-		});
-	})();
+
+            const amdRequire = amdLoader.require;
+            const amdDefine = amdLoader.require.define;
+
+
+
+            function uriFromPath(_path) {
+                var pathName = path.resolve(_path).replace(/\\/g, '/');
+                if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+                    pathName = '/' + pathName;
+                }
+                return encodeURI('file://' + pathName);
+            }
+
+            amdRequire.config({
+                baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min'))
+            });
+
+            // workaround monaco-css not understanding the environment
+            self.module = undefined;
+
+            amdRequire(['vs/editor/editor.main'], function () {
+
+                
+
+                //monaco.editor.setTheme("vs");
+                //const amdVbscript = require('../app/js/vbscript.contribution.js');
+                //const amdVbscript = require('../app/js/vbscript.contribution.js');
+                
+                registerVbLangModel("vbscript");
+
+                var editor = monaco.editor.create(document.getElementById('container'), {
+                    scrollBeyondLastLine: false,
+                    language:"vbscript"
+                });
+                var currentTheme = "vs";
+                
+                monaco.editor.setTheme(currentTheme);
+
+                currentEditor = editor;
+
+
+                setEditorState();
+
+                //var model = setupVbScriptLang();
+                //editor.setModel(model);
+            });
+        })();
+
+        function setEditorState() {
+            
+            currentViewState = currentEditor.saveViewState();
+
+            
+            currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(), "vbscript"));
+
+            
+           currentEditor.restoreViewState(currentViewState);
+            
+        }
+
+        function registerVbLangModel(languageId) {
+	        monaco.languages.register({ id: languageId });
+
+            var langModel = monaco.editor.createModel(getVbScriptDef(), 'vbscript');
+
+            //var langModel = monaco.editor.getModel("js/vbscript.js");
+		    var def = null;
+		    try {
+			    def = eval("(function(){ " + langModel.getValue() + " })()");
+		    } catch (err) {
+                debugger;
+			    return;
+		    }
+		    monaco.languages.setMonarchTokensProvider(languageId, def);
+        }
+
+
+        function getVbScriptDef() {
+            return vbLangString; //JSON.stringify(vbLang);//  getInnerText(document.getElementById("langDef"));
+        }
+
+        function getInnerText(elem) {
+	        var text = elem.innerText;
+	        if (!text) text = elem.textContent;
+	        return text;
+        }
+
 	</script>
 </html>
