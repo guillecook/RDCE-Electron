@@ -14,7 +14,7 @@ const {
 
 //Listen for app ready
 app.on('ready', function () {
-   loadMainWindow();
+   //loadMainWindow();
    loadLoginWindow(mainWindow);
 });
 
@@ -34,13 +34,17 @@ function loadMainWindow() {
       }
    });
    mainWindow.maximize();
-
+   mainWindow.on('close', function() { //   <---- Catch close event
+      mainWindow = null;
+      loadLoginWindow();
+   });
    //Load html file into main window
    mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, '../mainWindow.html'),
       protocol: 'file',
       slashes: true
    }));
+   mainWindow.webContents.openDevTools();
 }
 
 //Login window
@@ -51,14 +55,18 @@ function loadLoginWindow(parentWindow) {
    loginWindow = new BrowserWindow({
       parent: parentWindow,
       width: 500,
-      height: 450,
-      frame: false,
-      modal: true
+      height: 550,
+      frame: true,
+      modal: true,
+      webPreferences: {
+         nodeIntegration: true,
+         defaultEncoding: 'UTF-8'
+      }
    });
    loginWindow.on('closed', (e) => {
       console.log(e);
       debugger;
-      loginWindow = null
+      
    });
    loginWindow.loadURL(url.format({
       pathname: path.join(__dirname, '../login.html'),
@@ -72,9 +80,10 @@ const {
 } = require('electron');
 ipcMain.on('synchronous-message', (event, arg) => {
    if (arg == "close-app") {
+   }
+   if (arg == "open-explorer") {
+      loadMainWindow();
       loginWindow.close();
-      loginWindow = null;
-      //app.quit();
    }
 });
 
