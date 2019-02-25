@@ -1,0 +1,42 @@
+Sub MySub
+  Dim d
+  d = "sd" &_
+  "sdsd" & _
+  "sd"
+  d = <#
+    <html>
+      <head>
+      <script type="text/javascript">
+        function caca(){
+
+        }
+      </script>
+
+    </html>
+  #>
+  Dim lala
+  lala = 0
+
+  If d = 0 Then
+
+  Else
+
+  End If
+
+  Select d
+    Case "er"    
+  End Select
+
+  For Each node in dom.documentElement.childNodes
+
+  Next
+
+  For i = 0 To 4
+
+
+    Exit For
+  Next
+Dim locula
+locula = 0
+
+End Sub

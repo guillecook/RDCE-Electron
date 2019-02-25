@@ -74,6 +74,119 @@
 			});
 		}
 	}
+	
 </script>
+<script>
+	var currentEditor = null;
+	var currentViewState = null;
+	var vbLangString = null;
 
+	const fs = require("fs");
+
+	// Asynchronous read
+	fs.readFile('app/js/vbscript.txt', function (err, data) {
+		//debugger;
+		if (err) {
+			return console.error(err);
+		}
+		//console.log("Asynchronous read: " + data.toString());
+		vbLangString = data.toString();
+	});
+
+	(function () {
+		const path = require('path');
+		const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
+
+
+		const amdRequire = amdLoader.require;
+		const amdDefine = amdLoader.require.define;
+
+
+
+		function uriFromPath(_path) {
+			var pathName = path.resolve(_path).replace(/\\/g, '/');
+			if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+				pathName = '/' + pathName;
+			}
+			return encodeURI('file://' + pathName);
+		}
+
+		amdRequire.config({
+			baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min'))
+		});
+
+		// workaround monaco-css not understanding the environment
+		self.module = undefined;
+
+		amdRequire(['vs/editor/editor.main'], function () {
+
+			
+
+			//monaco.editor.setTheme("vs");
+			//const amdVbscript = require('../app/js/vbscript.contribution.js');
+			//const amdVbscript = require('../app/js/vbscript.contribution.js');
+			
+			registerVbLangModel("vbscript");
+
+			var editor = monaco.editor.create(document.getElementById('container'), {
+				scrollBeyondLastLine: false,
+				language:"vbscript"
+			});
+			var currentTheme = "vs";
+			
+			monaco.editor.setTheme(currentTheme);
+
+			currentEditor = editor;
+
+
+			setEditorState();
+
+			//var model = setupVbScriptLang();
+			//editor.setModel(model);
+		});
+	})();
+
+	function setEditorState() {
+		
+		currentViewState = currentEditor.saveViewState();
+
+
+		currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(),"vbscript"));
+
+		
+		currentEditor.restoreViewState(currentViewState);
+
+		//TODO Setear valor
+		currentEditor.setValue("");
+		
+	}
+
+	function registerVbLangModel(languageId) {
+		monaco.languages.register({ id: languageId });
+
+		var langModel = monaco.editor.createModel(getVbScriptDef(), 'vbscript');
+
+		//var langModel = monaco.editor.getModel("js/vbscript.js");
+		var def = null;
+		try {
+			def = eval("(function(){ " + langModel.getValue() + " })()");
+		} catch (err) {
+			debugger;
+			return;
+		}
+		monaco.languages.setMonarchTokensProvider(languageId, def);
+	}
+
+
+	function getVbScriptDef() {
+		return vbLangString; //JSON.stringify(vbLang);//  getInnerText(document.getElementById("langDef"));
+	}
+
+	function getInnerText(elem) {
+		var text = elem.innerText;
+		if (!text) text = elem.textContent;
+		return text;
+	}
+
+</script>
 </html>
