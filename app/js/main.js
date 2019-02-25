@@ -15,11 +15,14 @@ const {
 //Listen for app ready
 app.on('ready', function () {
    //loadMainWindow();
+   debugger;
    loadLoginWindow(mainWindow);
 });
 
 
 let mainWindow;
+let loginWindow;
+let monacoEditorWindow;
 
 function loadMainWindow() {
    //Create new main window
@@ -34,7 +37,7 @@ function loadMainWindow() {
       }
    });
    mainWindow.maximize();
-   mainWindow.on('close', function() { //   <---- Catch close event
+   mainWindow.on('close', function () { //   <---- Catch close event
       mainWindow = null;
       loadLoginWindow();
    });
@@ -47,9 +50,7 @@ function loadMainWindow() {
    mainWindow.webContents.openDevTools();
 }
 
-//Login window
-//TODO: cuando lo llamamos?
-let loginWindow;
+
 
 function loadLoginWindow(parentWindow) {
    loginWindow = new BrowserWindow({
@@ -66,7 +67,7 @@ function loadLoginWindow(parentWindow) {
    loginWindow.on('closed', (e) => {
       console.log(e);
       debugger;
-      
+
    });
    loginWindow.loadURL(url.format({
       pathname: path.join(__dirname, '../login.html'),
@@ -79,13 +80,58 @@ const {
    ipcMain
 } = require('electron');
 ipcMain.on('synchronous-message', (event, arg) => {
+   if (arg.source == "table-cell-click") {
+      loadMonacoEditorWindow(mainWindow, arg);
+      return;
+   }
    if (arg == "close-app") {
+
    }
    if (arg == "open-explorer") {
       loadMainWindow();
       loginWindow.close();
    }
+
 });
+
+let openEditorParams = {
+};
+function loadMonacoEditorWindow(parentWindow, arg) {
+   monacoEditorWindow = new BrowserWindow({
+      parent: parentWindow,
+      width: 450,
+      height: 450,
+      show: false
+   });
+   monacoEditorWindow.on('closed', (e) => {
+      console.log(e);
+      debugger;
+      //monacoEditorWindow = null
+   });
+   
+   openEditorParams = {
+      docid: arg.param.docid,
+      column: arg.param.column
+   };
+   settings.set("documentOpenParams", {openEditorParams});
+   
+   monacoEditorWindow.webContents.openDevTools();
+   monacoEditorWindow.maximize()
+   monacoEditorWindow.loadURL(url.format({
+      pathname: path.join(__dirname, '../monacoCodeEditor.html'),
+      protocol: 'file',
+      slashes: true
+   }));
+   monacoEditorWindow.webContents.on("did-finish-load", function() {
+    
+      monacoEditorWindow.webContents.send('document-params-data', openEditorParams);
+   });
+   monacoEditorWindow.once("ready-to-show", () => {
+      monacoEditorWindow.show();
+   });
+
+
+}
 
 
 

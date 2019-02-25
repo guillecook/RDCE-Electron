@@ -145,6 +145,7 @@ function fillFolderSyncEvents(container, syncEvents) {
     syncEventsTable.setData(syncEvents);
 }
 
+var ipcRenderer = require('electron').ipcRenderer;
 /**Folder SyncEvents Tab Content */
 const documentsTabContent = `  
 Listado de documentos
@@ -172,7 +173,9 @@ function fillDocuments(container, documentFields, arrFields, codeColumnName) {
         }, ],
         rowDblClick: function (e, row) {
             var codeColumn = $("#documents-table").attr("code-column-name");
-            alert(row.getCell("DOC_ID").getValue() + " Code column to open: "+ codeColumn);
+            console.log("rowclick!");
+            var pararmeters = JSON.stringify({docid: row.getCell("DOC_ID").getValue(), column: codeColumn});
+            ipcRenderer.send('synchronous-message', {source: "table-cell-click", param : pararmeters});
         },
     });
     // ? Porque vienen en mayusculas las propiedades de los fields?

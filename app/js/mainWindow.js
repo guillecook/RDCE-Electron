@@ -6,6 +6,7 @@ const settings = require('electron-settings');
 const {
    dialog
 } = require('electron')
+ipc = require('electron').ipcRenderer;
 
 
 initPage();
@@ -106,14 +107,18 @@ function documentSearch(folderId, jsonFields) {
    const defaultMaxDescriptionLength = 100;
    var sFields = "";
    var sCodeColumnName = ""
-   for(var index=0; index < jsonFields.length; index++){
-      if(sFields!=""){ sFields+= ",";}
-      sFields+=jsonFields[index].name;
-      if (jsonFields[index].isCodeColumn){
+   for (var index = 0; index < jsonFields.length; index++) {
+      if (sFields != "") {
+         sFields += ",";
+      }
+      sFields += jsonFields[index].name;
+      if (jsonFields[index].isCodeColumn) {
          sCodeColumnName = jsonFields[index].name;
       }
    }
-   if (sFields==""){ sFields = defaultFields;  }
+   if (sFields == "") {
+      sFields = defaultFields;
+   }
    DoorsAPI.folderSearch(folderId, sFields, defaultFormula, defaultOrder, defaultMaxDocs, defaultRecursive, defaultMaxDescriptionLength).then(
       function (documents) {
          fillDocuments($("#documentts"), documents, jsonFields, sCodeColumnName);
@@ -221,32 +226,4 @@ function buildJsonTreeSource(parentFolderId, parentNode) {
          buildJsonTreeSource(jsonFolder.FldId, tempNode);
       }
    }
-}
-
-const buttonTest = document.getElementById('buttont_test');
-buttonTest.addEventListener('click', function (data) {
-    monacoEditorSampleWindow();
-});
-
-
-/**To Test */
-function monacoEditorSampleWindow(parentWindow) {
-   let monacoEditorSampleWindow;
-   monacoEditorSampleWindow = new BrowserWindow({
-      parent: parentWindow,
-      width: 500,
-      height: 450,
-      frame: true,
-      modal: true
-   });
-   monacoEditorSampleWindow.on('closed', (e) => {
-      console.log(e);
-      debugger;
-      //monacoEditorSampleWindow = null
-   });
-   monacoEditorSampleWindow.loadURL(url.format({
-      pathname: path.join(__dirname, '../monacoeditorsample.html'),
-      protocol: 'file',
-      slashes: true
-   }));
 }
