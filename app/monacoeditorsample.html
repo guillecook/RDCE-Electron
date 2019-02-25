@@ -3,11 +3,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Monaco Editor!</title>
-        <script type="text/javascript" src="js/vbscript.js" ></script>
 	</head>
 	<body>
 		<h1>Monaco Editor in Electron!</h1>
-		<div id="container" style="width:500px;height:300px;border:1px solid #ccc"></div>
+		<div id="container" style="width:600px;height:500px;border:1px solid #ccc"></div>
 
         <pre id="langDef">
         </pre>
@@ -87,11 +86,14 @@
             
             currentViewState = currentEditor.saveViewState();
 
-            
-            currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(), "vbscript"));
+
+            currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(),"vbscript"));
 
             
-           currentEditor.restoreViewState(currentViewState);
+            currentEditor.restoreViewState(currentViewState);
+
+            //TODO Setear valor
+            currentEditor.setValue("");
             
         }
 
