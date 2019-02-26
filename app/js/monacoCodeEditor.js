@@ -22,9 +22,10 @@ $(document).ready(function () {
     Doors.RESTFULL.AuthToken = settings.get("authToken").value;
 });
 
-
+var currentDocument = null;
 function loadDocument(documentParams) {
     DoorsAPI.documentsGetById(documentParams.docid).then(function (doc) {
+        currentDocument = doc;
         var field = doc.CustomFields.find(field => field.Name == documentParams.column.toUpperCase());
         documentParams.code = field.Value;
         if(documentParams.code==null){
@@ -35,3 +36,15 @@ function loadDocument(documentParams) {
         console.log(err);
     });
 }
+
+function saveDocument(documentParams) {
+    var field = currentDocument.CustomFields.find(field => field.Name == documentParams.column.toUpperCase());
+    field.Value = documentParams.code;
+    DoorsAPI.documentSave(currentDocument).then(function (doc) {
+        console.log("documnet save ok");
+    }, function (err) {
+        console.log("documnet save fail");
+        console.log(err);
+    });
+}
+module.exports.saveDocument = saveDocument;

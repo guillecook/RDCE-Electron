@@ -39,8 +39,8 @@
 
 <script>
 	window.Bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.js');
-
-	require('./js/monacoCodeEditor.js');
+	window.MonacoEditor = require('./js/monacoCodeEditor.js');
+	
 
 	var currentEditor = null;
 	var currentViewState = null;
@@ -56,13 +56,13 @@
 	});
 
 
-
+	var currentDocumentParams=null;
 	function loadEditor(documentParams) {
 		const path = require('path');
 		const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
 		const amdRequire = amdLoader.require;
 		const amdDefine = amdLoader.require.define;
-
+		currentDocumentParams = documentParams;
 		function uriFromPath(_path) {
 			var pathName = path.resolve(_path).replace(/\\/g, '/');
 			if (pathName.length > 0 && pathName.charAt(0) !== '/') {
@@ -91,12 +91,19 @@
 			monaco.editor.setTheme(currentTheme);
 			currentEditor = editor;
 			setEditorState(documentParams);
-
+			bindEvents();
+			
 			//var model = setupVbScriptLang();
 			//editor.setModel(model);
 		});
 	}
 
+	function bindEvents(){
+		var saveBinding = currentEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function() {
+				currentDocumentParams.code = currentEditor.getValue();
+				window.MonacoEditor.saveDocument(currentDocumentParams);
+			});
+	}
 	function setEditorState(documentParams) {
 		currentViewState = currentEditor.saveViewState();
 		currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(), "vbscript"));
@@ -132,6 +139,7 @@
 		if (!text) text = elem.textContent;
 		return text;
 	}
+	
 </script>
 
 </html>
