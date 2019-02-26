@@ -49,25 +49,19 @@
 	const fs = require("fs");
 	// Asynchronous read
 	fs.readFile('app/js/vbscript.txt', function (err, data) {
-		//debugger;
 		if (err) {
 			return console.error(err);
 		}
-		//console.log("Asynchronous read: " + data.toString());
 		vbLangString = data.toString();
 	});
 
 
 
-	function loadEditor() {
+	function loadEditor(documentParams) {
 		const path = require('path');
 		const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
-
-
 		const amdRequire = amdLoader.require;
 		const amdDefine = amdLoader.require.define;
-
-
 
 		function uriFromPath(_path) {
 			var pathName = path.resolve(_path).replace(/\\/g, '/');
@@ -76,18 +70,12 @@
 			}
 			return encodeURI('file://' + pathName);
 		}
-
 		amdRequire.config({
 			baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min'))
 		});
-
 		// workaround monaco-css not understanding the environment
 		self.module = undefined;
-
 		amdRequire(['vs/editor/editor.main'], function () {
-
-
-
 			//monaco.editor.setTheme("vs");
 			//const amdVbscript = require('../app/js/vbscript.contribution.js');
 			//const amdVbscript = require('../app/js/vbscript.contribution.js');
@@ -101,37 +89,26 @@
 			var currentTheme = "vs";
 
 			monaco.editor.setTheme(currentTheme);
-
 			currentEditor = editor;
-
-
-			setEditorState();
+			setEditorState(documentParams);
 
 			//var model = setupVbScriptLang();
 			//editor.setModel(model);
 		});
 	}
 
-	function setEditorState() {
-
+	function setEditorState(documentParams) {
 		currentViewState = currentEditor.saveViewState();
-
-
 		currentEditor.setModel(monaco.editor.createModel(getVbScriptDef(), "vbscript"));
-
-
 		currentEditor.restoreViewState(currentViewState);
-
 		//TODO Setear valor
-		currentEditor.setValue("");
-
+		currentEditor.setValue(documentParams.code);
 	}
 
 	function registerVbLangModel(languageId) {
 		monaco.languages.register({
 			id: languageId
 		});
-
 		var langModel = monaco.editor.createModel(getVbScriptDef(), 'vbscript');
 
 		//var langModel = monaco.editor.getModel("js/vbscript.js");

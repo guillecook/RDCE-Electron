@@ -11,9 +11,9 @@ ipcRenderMonaco.on('document-params-data', function (event, args) {
 });
 
 function initPage(documentParams) {
-    loadEditor(documentParams);
     $("#loading-spinner").addClass("d-none");
     $("#container").removeClass("d-none");
+    loadDocument(documentParams);
 }
 
 $(document).ready(function () {
@@ -21,3 +21,17 @@ $(document).ready(function () {
     Doors.RESTFULL.ServerUrl = settings.get("endpoint").value;
     Doors.RESTFULL.AuthToken = settings.get("authToken").value;
 });
+
+
+function loadDocument(documentParams) {
+    DoorsAPI.documentsGetById(documentParams.docid).then(function (doc) {
+        var field = doc.CustomFields.find(field => field.Name == documentParams.column.toUpperCase());
+        documentParams.code = field.Value;
+        if(documentParams.code==null){
+            documentParams.code = "";
+        }
+        loadEditor(documentParams);
+    }, function (err) {
+        console.log(err);
+    });
+}
