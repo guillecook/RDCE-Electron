@@ -147,6 +147,9 @@ a.article:hover {
     padding-left: 10%;
     list-style: none;
 }
+#sidebar{
+    overflow: scroll;
+}
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
