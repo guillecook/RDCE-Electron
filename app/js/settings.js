@@ -6,6 +6,9 @@ var knowFormFields = {
                     name: "doc_id"
                 },
                 {
+                    name: "fld_id"
+                },
+                {
                     name: "name"
                 },
                 {
@@ -30,6 +33,9 @@ var knowFormFields = {
                     name: "doc_id"
                 },
                 {
+                    name: "fld_id"
+                },
+                {
                     name: "name"
                 },
                 {
@@ -50,6 +56,9 @@ var knowFormFields = {
 var defaultDocumentsFields = {
     fields: [{
             name: "doc_id"
+        },
+        {
+            name: "fld_id"
         },
         {
             name: "subject"

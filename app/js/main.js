@@ -75,13 +75,18 @@ function loadLoginWindow(parentWindow) {
       slashes: true
    }));
 }
+var nodeConsole = require('console');
+var mainConsole = new nodeConsole.Console(process.stdout, process.stderr);
+
 
 const {
    ipcMain
 } = require('electron');
 ipcMain.on('synchronous-message', (event, arg) => {
    if (arg.source == "table-cell-click") {
-      loadMonacoEditorWindow(mainWindow, arg);
+      console.log(arg.parameters);
+      var parameters = JSON.parse(arg.parameters);
+      loadMonacoEditorWindow(mainWindow, parameters);
       return;
    }
    if (arg == "close-app") {
@@ -94,8 +99,13 @@ ipcMain.on('synchronous-message', (event, arg) => {
 
 });
 
-let openEditorParams = {
+var openEditorParams = {
+   fldid: null,
+   docid: null,
+   column: null
 };
+
+
 function loadMonacoEditorWindow(parentWindow, arg) {
    monacoEditorWindow = new BrowserWindow({
       parent: parentWindow,
@@ -106,15 +116,15 @@ function loadMonacoEditorWindow(parentWindow, arg) {
    monacoEditorWindow.on('closed', (e) => {
       console.log(e);
       debugger;
-      //monacoEditorWindow = null
+      monacoEditorWindow = null
    });
+
+   openEditorParams.fldid = arg.fldid;
+   openEditorParams.docid = arg.docid;
+   openEditorParams.column = arg.column;
+
    
-   openEditorParams = {
-      docid: arg.param.docid,
-      column: arg.param.column
-   };
-   settings.set("documentOpenParams", {openEditorParams});
-   
+
    monacoEditorWindow.webContents.openDevTools();
    monacoEditorWindow.maximize()
    monacoEditorWindow.loadURL(url.format({
@@ -122,15 +132,17 @@ function loadMonacoEditorWindow(parentWindow, arg) {
       protocol: 'file',
       slashes: true
    }));
-   monacoEditorWindow.webContents.on("did-finish-load", function() {
-    
-      monacoEditorWindow.webContents.send('document-params-data', openEditorParams);
+
+   monacoEditorWindow.webContents.on("did-finish-load", function () {
+      monacoEditorWindow.webContents.send('document-params-data', {
+         fldid: openEditorParams.fldid,
+         docid: openEditorParams.docid,
+         column: openEditorParams.column
+      });
    });
    monacoEditorWindow.once("ready-to-show", () => {
       monacoEditorWindow.show();
    });
-
-
 }
 
 

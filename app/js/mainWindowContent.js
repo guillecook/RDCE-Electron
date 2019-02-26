@@ -174,8 +174,8 @@ function fillDocuments(container, documentFields, arrFields, codeColumnName) {
         rowDblClick: function (e, row) {
             var codeColumn = $("#documents-table").attr("code-column-name");
             console.log("rowclick!");
-            var pararmeters = JSON.stringify({docid: row.getCell("DOC_ID").getValue(), column: codeColumn});
-            ipcRenderer.send('synchronous-message', {source: "table-cell-click", param : pararmeters});
+            var pararmeters = JSON.stringify({fldid :row.getCell("FLD_ID").getValue(), docid: row.getCell("DOC_ID").getValue(), column: codeColumn});
+            ipcRenderer.send('synchronous-message', {source: "table-cell-click", parameters : pararmeters});
         },
     });
     // ? Porque vienen en mayusculas las propiedades de los fields?
