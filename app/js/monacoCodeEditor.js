@@ -28,6 +28,8 @@ function loadDocument(documentParams) {
         currentDocument = doc;
         var field = doc.CustomFields.find(field => field.Name == documentParams.column.toUpperCase());
         documentParams.code = field.Value;
+        //console.log(doc);
+        documentParams.name = doc.CustomFields[9].Value;
         if(documentParams.code==null){
             documentParams.code = "";
         }
@@ -42,9 +44,18 @@ function saveDocument(documentParams) {
     field.Value = documentParams.code;
     DoorsAPI.documentSave(currentDocument).then(function (doc) {
         console.log("documnet save ok");
+        location.reload();
     }, function (err) {
         console.log("documnet save fail");
+        alert(err.ExceptionMessage);
         console.log(err);
     });
 }
 module.exports.saveDocument = saveDocument;
+
+$(document).keydown(function(e) {
+    // ESCAPE key pressed
+    if (e.keyCode == 27) {
+        window.top.close();
+    }
+ });
