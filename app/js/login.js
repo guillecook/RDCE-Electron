@@ -153,6 +153,7 @@ function doLogon() {
             console.log("Error on get loggedUser" + err.ExceptionMessage);
         });
     }, function (err) {
+        debugger;
         showError(err.ExceptionMessage);
     });
 }
